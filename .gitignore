@@ -1,0 +1,13 @@
+pt_generated/
+.classpath
+.errai/
+.factorypath
+.niogit/
+.project
+.settings/
+target/
+war/
+gwt-unitCache/
+.apt_generated/
+.project
+script.tmp
