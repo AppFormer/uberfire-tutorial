@@ -12,6 +12,7 @@ import org.uberfire.client.annotations.WorkbenchScreen;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
+import com.mycompany.uftutorial.shared.Mood;
 
 @Dependent
 @WorkbenchScreen(identifier = "com.mycompany.uftutorial.client.HelloWorldScreen")
@@ -39,5 +40,9 @@ public class HelloWorldScreen {
 
   private String getInitialLabelText() {
     return "Hello, " + securityContext.getCachedUser().getIdentifier() + ". Welcome to UberFire!";
+  }
+
+  public void onMoodChange(@Observes Mood mood) {
+    label.setText("I understand you are feeling " + mood.getText());
   }
 }

@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
@@ -38,6 +39,12 @@ public class SmokeTest {
     driver.findElement(By.cssSelector("input.button")).click();
 
     waitForText("Hello, admin. Welcome to UberFire!", By.cssSelector("div.gwt-Label"));
+
+    driver.findElement(By.cssSelector("input.gwt-TextBox")).clear();
+    driver.findElement(By.cssSelector("input.gwt-TextBox")).sendKeys("testy");
+    driver.findElement(By.cssSelector("input.gwt-TextBox")).sendKeys(Keys.RETURN);
+
+    assertEquals("I understand you are feeling testy", driver.findElement(By.cssSelector("div.gwt-Label")).getText());
   }
 
   private void waitForText(String text, By by) throws InterruptedException {
@@ -50,5 +57,9 @@ public class SmokeTest {
       }
       Thread.sleep(1000);
     }
+  }
+
+  private void assertElementPresent(By by) {
+    assertEquals(1, driver.findElements(by).size());
   }
 }
