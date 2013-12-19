@@ -45,6 +45,9 @@ public class SmokeTest {
     driver.findElement(By.cssSelector("input.gwt-TextBox")).sendKeys(Keys.RETURN);
 
     assertEquals("I understand you are feeling testy", driver.findElement(By.cssSelector("div.gwt-Label")).getText());
+
+    assertEquals("Screens", driver.findElement(By.linkText("Screens")).getText());
+    assertEquals("Other", driver.findElement(By.linkText("Other")).getText());
   }
 
   private void waitForText(String text, By by) throws InterruptedException {
