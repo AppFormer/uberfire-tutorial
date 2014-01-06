@@ -48,6 +48,9 @@ public class SmokeTest {
 
     assertEquals("Screens", driver.findElement(By.linkText("Screens")).getText());
     assertEquals("Other", driver.findElement(By.linkText("Other")).getText());
+
+    driver.findElement(By.cssSelector("i.icon-asterisk")).click();
+    assertEquals("Hello, admin. Welcome to UberFire!", driver.findElement(By.cssSelector("div.gwt-Label")).getText());
   }
 
   private void waitForText(String text, By by) throws InterruptedException {

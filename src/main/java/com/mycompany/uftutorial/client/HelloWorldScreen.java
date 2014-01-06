@@ -9,6 +9,12 @@ import org.jboss.errai.security.client.local.api.SecurityContext;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.annotations.WorkbenchScreen;
+import org.uberfire.client.annotations.WorkbenchToolBar;
+import org.uberfire.mvp.Command;
+import org.uberfire.workbench.model.toolbar.IconType;
+import org.uberfire.workbench.model.toolbar.ToolBar;
+import org.uberfire.workbench.model.toolbar.impl.DefaultToolBar;
+import org.uberfire.workbench.model.toolbar.impl.DefaultToolBarItem;
 
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Label;
@@ -40,6 +46,18 @@ public class HelloWorldScreen {
 
   private String getInitialLabelText() {
     return "Hello, " + securityContext.getCachedUser().getIdentifier() + ". Welcome to UberFire!";
+  }
+
+  @WorkbenchToolBar
+  public ToolBar getToolBar() {
+    ToolBar tb = new DefaultToolBar("hello-world-toolbar");
+    tb.addItem(new DefaultToolBarItem(IconType.ASTERISK, "Reset Hello Screen", new Command() {
+      @Override
+      public void execute() {
+        label.setText(getInitialLabelText());
+      }
+    }));
+    return tb;
   }
 
   public void onMoodChange(@Observes Mood mood) {
