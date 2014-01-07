@@ -43,6 +43,12 @@ public class AppMenuBar extends Composite implements Header {
           .menu("Mood Screen").respondsWith(makeGoToPlaceCommand(MoodScreen.class)).endMenu()
         .endMenus()
       .endMenu()
+      .newTopLevelMenu("Perspectives")
+        .menus()
+          .menu("Home Perspective").respondsWith(makeGoToPlaceCommand(HomePerspective.class)).endMenu()
+          .menu("Horizontal Perspective").respondsWith(makeGoToPlaceCommand(HorizontalPerspective.class)).endMenu()
+        .endMenus()
+      .endMenu()
       .newTopLevelMenu("Other")
         .menus()
           .menu("Alert Box").respondsWith(new Command() {
@@ -66,4 +72,5 @@ public class AppMenuBar extends Composite implements Header {
       }
     };
   }
+
 }
