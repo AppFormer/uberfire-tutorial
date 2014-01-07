@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class SmokeTest {
@@ -51,6 +52,19 @@ public class SmokeTest {
 
     driver.findElement(By.cssSelector("i.icon-asterisk")).click();
     assertEquals("Hello, admin. Welcome to UberFire!", driver.findElement(By.cssSelector("div.gwt-Label")).getText());
+
+    // test perspective switching
+    WebElement perspectivesMenu = driver.findElement(By.linkText("Perspectives"));
+    perspectivesMenu.click();
+    WebElement horizontalPerspective = driver.findElement(By.linkText("Horizontal Perspective"));
+    horizontalPerspective.click();
+
+    WebElement horizNorthPanel = driver.findElement(By.id("horizontal-northPanel"));
+    WebElement horizRootPanel = driver.findElement(By.id("horizontal-rootPanel"));
+
+    // make sure the horizontal perspective is actually horizontal!
+    assertTrue(horizNorthPanel.getSize().width > horizNorthPanel.getSize().height);
+    assertTrue(horizRootPanel.getSize().width > horizRootPanel.getSize().height);
   }
 
   private void waitForText(String text, By by) throws InterruptedException {
