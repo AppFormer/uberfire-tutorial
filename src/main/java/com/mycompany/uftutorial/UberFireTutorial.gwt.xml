@@ -6,15 +6,9 @@
      configuration in pom.xml and the .gitignore file. -->
 <module rename-to="UberFireTutorial">
 
-  <inherits name="org.jboss.errai.enterprise.All"/>
-
-  <inherits name="org.uberfire.UberfireJS"/>
-
-  <inherits name="org.uberfire.security.UberfireSecurityClient"/>
+  <inherits name="org.jboss.errai.ui.UI"/>
 
   <inherits name="org.uberfire.UberfireWorkbench"/>
-  <inherits name="org.uberfire.UberfireWidgetsCore"/>
-  <inherits name="org.uberfire.UberfireBackend"/>
 
   <source path="client"/>
   <source path="shared"/>

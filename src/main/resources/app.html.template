@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <script type="text/javascript">
+    erraiBusRemoteCommunicationEnabled = false;
+  </script>
+
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
   <title>UberFire Showcase</title>
-  <link rel="stylesheet" href="css/uberfire-loading.css">
-  <link rel="stylesheet" href="css/uberfire-showcase.css">
-  <link rel="stylesheet" href="css/ruleflow.css">
 </head>
 <body>
 
@@ -17,8 +18,6 @@
   <!-- loading indicator to display while the app is being loaded -->
   <div id="loading">
     <div class="loading-indicator">
-      <img src="images/loading-icon.gif" width="32" height="32"
-           style="margin-right: 8px; float: left; vertical-align: top;">
         Please wait<br/>
         <span id="loading-msg">Loading application...</span>
     </div>
