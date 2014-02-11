@@ -3,9 +3,9 @@ package com.mycompany.uftutorial.client;
 import javax.annotation.PostConstruct;
 import javax.enterprise.event.Observes;
 
+import org.jboss.errai.ioc.client.api.AfterInitialization;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 import org.uberfire.client.UberFirePreferences;
-import org.uberfire.client.workbench.events.ApplicationReadyEvent;
 import org.uberfire.workbench.events.UberFireEvent;
 
 import com.google.gwt.animation.client.Animation;
@@ -31,7 +31,8 @@ public class ClientEntryPoint {
    * Gets invoked late in the startup sequence, when all UberFire framework
    * bootstrapping has completed.
    */
-  private void finalInit(@Observes final ApplicationReadyEvent event) {
+  @AfterInitialization
+  private void finalInit() {
     hideLoadingPopup();
   }
 
