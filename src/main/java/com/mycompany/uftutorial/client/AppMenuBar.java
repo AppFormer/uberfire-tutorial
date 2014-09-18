@@ -4,13 +4,20 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.jboss.errai.bus.client.api.BusErrorCallback;
+import org.jboss.errai.bus.client.api.messaging.Message;
+import org.jboss.errai.common.client.api.Caller;
+import org.jboss.errai.common.client.api.RemoteCallback;
+import org.jboss.errai.security.shared.service.AuthenticationService;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.workbench.Header;
 import org.uberfire.client.workbench.widgets.menu.WorkbenchMenuBarPresenter;
 import org.uberfire.mvp.Command;
 import org.uberfire.workbench.model.menu.MenuFactory;
+import org.uberfire.workbench.model.menu.MenuPosition;
 import org.uberfire.workbench.model.menu.Menus;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.Widget;
@@ -23,6 +30,9 @@ public class AppMenuBar extends Composite implements Header {
 
   @Inject
   private PlaceManager placeManager;
+
+  @Inject
+  private Caller<AuthenticationService> authService;
 
   @Override
   public Widget asWidget() {
@@ -64,6 +74,10 @@ public class AppMenuBar extends Composite implements Header {
             }).endMenu()
         .endMenus()
       .endMenu()
+      .newTopLevelMenu("Logout")
+        .position(MenuPosition.RIGHT)
+        .respondsWith(new LogoutCommand())
+      .endMenu()
     .build();
 
     menuBarPresenter.addMenus(menus);
@@ -78,4 +92,25 @@ public class AppMenuBar extends Composite implements Header {
     };
   }
 
+  private class LogoutCommand implements Command {
+    @Override
+    public void execute() {
+      authService.call(new RemoteCallback<Void>() {
+        @Override
+        public void callback(Void response) {
+          redirect(GWT.getHostPageBaseURL() + "login.jsp");
+        }
+      }, new BusErrorCallback() {
+        @Override
+        public boolean error(Message message, Throwable throwable) {
+          Window.alert("Logout failed: " + throwable);
+          return true;
+        }
+      }).logout();
+    }
+  }
+
+  private static native void redirect( String url )/*-{
+    $wnd.location = url;
+  }-*/;
 }
