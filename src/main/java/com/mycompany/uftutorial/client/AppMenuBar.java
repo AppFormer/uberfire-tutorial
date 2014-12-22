@@ -74,6 +74,15 @@ public class AppMenuBar extends Composite implements Header {
             }).endMenu()
         .endMenus()
       .endMenu()
+      .newTopLevelMenu("Status")
+        .position(MenuPosition.CENTER)
+        .respondsWith(new Command() {
+          @Override
+          public void execute() {
+            Window.alert("You clicked the status button.");
+          }
+        })
+      .endMenu()
       .newTopLevelMenu("Logout")
         .position(MenuPosition.RIGHT)
         .respondsWith(new LogoutCommand())

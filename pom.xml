@@ -15,8 +15,8 @@
     <maven.clean.plugin.version>2.4.1</maven.clean.plugin.version>
     <maven.deploy.plugin.version>2.7</maven.deploy.plugin.version>
     <maven.resources.plugin.version>2.6</maven.resources.plugin.version>
-    <maven.gwt.plugin.version>2.5.1</maven.gwt.plugin.version>
-    <uberfire.version>0.5.0-SNAPSHOT</uberfire.version>
+    <maven.gwt.plugin.version>2.6.1</maven.gwt.plugin.version>
+    <uberfire.version>0.6.0-SNAPSHOT</uberfire.version>
     <errai.version>3.0.4.Final</errai.version>
     <errai.devmode.version>${errai.version}</errai.devmode.version>
     <errai.jboss.home>${user.home}/wildfly-8.1.0.Final</errai.jboss.home>
@@ -128,6 +128,12 @@
     <dependency>
       <groupId>org.uberfire</groupId>
       <artifactId>uberfire-workbench-client</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.uberfire</groupId>
+      <artifactId>uberfire-workbench-client-views-patternfly</artifactId>
       <scope>provided</scope>
     </dependency>
 
