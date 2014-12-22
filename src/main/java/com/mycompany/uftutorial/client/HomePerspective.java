@@ -15,8 +15,7 @@ import org.uberfire.workbench.model.impl.PerspectiveDefinitionImpl;
 
 @ApplicationScoped
 @WorkbenchPerspective(
-        identifier = "com.mycompany.uftutorial.client.HomePerspective",
-        isDefault = true)
+        identifier = "com.mycompany.uftutorial.client.HomePerspective")
 public class HomePerspective {
 
   @Perspective
