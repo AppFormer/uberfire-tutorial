@@ -24,12 +24,6 @@ public class AccordionScreenChooser extends Composite {
 
   @OnOpen
   public void onOpen() {
-    // FIXME this is a really horrible workaround! should instead modify UF API to allow PanelDefinition to opt out of having a scroll panel.
-    // The better fix would require changes to:
-    // WorkbenchPartPresenter.View
-    // WorkbenchPartView and its mock
-    // The @WorkbenchPanel annotation
-    // The annotation processor code generators and their tests
     Layouts.disableNearestScrollPanel(this);
   }
 }

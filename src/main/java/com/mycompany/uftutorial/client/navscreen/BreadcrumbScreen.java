@@ -11,8 +11,10 @@ import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.annotations.WorkbenchScreen;
 import org.uberfire.client.mvp.PlaceManager;
+import org.uberfire.client.util.Layouts;
 import org.uberfire.client.workbench.events.PerspectiveChange;
 import org.uberfire.client.workbench.events.SelectPlaceEvent;
+import org.uberfire.lifecycle.OnOpen;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.workbench.model.PerspectiveDefinition;
 
@@ -67,6 +69,11 @@ public class BreadcrumbScreen {
   void onChangePlace(@Observes SelectPlaceEvent spe) {
     currentPlace = spe.getPlace();
     refreshView();
+  }
+
+  @OnOpen
+  public void onOpen() {
+    Layouts.disableNearestScrollPanel(view);
   }
 
 }

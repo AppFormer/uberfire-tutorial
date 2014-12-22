@@ -29,7 +29,7 @@ public class TwoColumnPerspective extends Composite implements RequiresResize, P
 
   @Inject
   @DataField
-  @WorkbenchPanel(parts="com.mycompany.uftutorial.client.HelloWorldScreen", isDefault=true)
+  @WorkbenchPanel(parts="FormScreen", isDefault=true)
   ResizeFlowPanel contentArea;
 
   @Override
