@@ -26,13 +26,13 @@
 
 <body>
  <span id="badge">
-  <img src="UberFireTutorial/patternfly/dist/img/logo.svg" alt="PatternFly logo" />
+  <img src="uf-logo.png" alt="UberFire logo" />
  </span>
  <div class="container">
    <div class="row">
      <div class="col-sm-12">
        <div id="brand">
-         <img src="UberFireTutorial/patternfly/dist/img/brand.svg" alt="PatternFly Enterprise Application">
+         UberFire + PatternFly Demo Application
        </div><!--/#brand-->
      </div><!--/.col-*-->
      <div class="col-sm-7 col-md-6 col-lg-5 login">
@@ -88,24 +88,3 @@
  </div><!--/.container-->
 </body>
 </html>
-<%--     <form action="uf_security_check" method="post">
-      <p>
-        <label>Username</label>
-        <input value="" name="uf_username" class="text-input" type="text"/>
-        <br style="clear: both;"/>
-      </p>
-
-      <p>
-        <label>Password</label>
-        <input name="uf_password" class="text-input" type="password"/>
-        <br style="clear: both;"/>
-      </p>
-
-      <p>
-        <% if (request.getParameter("gwt.codesvr") != null) { %>
-          <input type="hidden" name="gwt.codesvr" value="<%= org.owasp.encoder.Encode.forHtmlAttribute(request.getParameter("gwt.codesvr")) %>"/>
-        <% } %>
-        <input class="button" type="submit" value="Sign In"/>
-      </p>
-    </form>
- --%>
