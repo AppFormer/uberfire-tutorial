@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.uberfire</groupId>
+    <artifactId>uftasks-parent-with-dependencies</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <relativePath>../uftasks-parent-with-dependencies/pom.xml</relativePath>
+  </parent>
+
+  <artifactId>uftasks-component</artifactId>
+  <packaging>pom</packaging>
+
+  <name>UFTasks Component</name>
+  <modules>
+    <module>uftasks-component-api</module>
+    <module>uftasks-component-backend</module>
+    <module>uftasks-component-client</module>
+  </modules>
+</project>
