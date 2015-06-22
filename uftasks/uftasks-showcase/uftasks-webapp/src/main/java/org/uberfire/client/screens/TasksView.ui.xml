@@ -13,6 +13,7 @@
     }
   </ui:style>
   <g:FlowPanel>
-    <b:Label text="Project View"/>
+    <g:FlowPanel ui:field="tasks"/>
+    <b:Button styleName="{style.button}" type="PRIMARY" icon="PLUS" text="New Folder" ui:field="newFolder"/>
   </g:FlowPanel>
 </ui:UiBinder>
