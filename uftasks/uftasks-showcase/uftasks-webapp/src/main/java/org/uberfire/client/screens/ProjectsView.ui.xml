@@ -5,8 +5,15 @@
              xmlns:b="urn:import:org.gwtbootstrap3.client.ui">
 
   <ui:with field='res' type='org.uberfire.client.resources.AppResource'/>
+  <ui:style>
+    .button {
+      float: right;
+      margin-right: 5px;
+    }
+  </ui:style>
   <g:FlowPanel>
-    <b:Label text="Project View"/>
+    <b:LinkedGroup ui:field="projects"/>
+    <b:Button styleName="{style.button}" type="PRIMARY" icon="PLUS" text="New Project" ui:field="newProject"/>
   </g:FlowPanel>
 
 </ui:UiBinder>
