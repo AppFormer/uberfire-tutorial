@@ -78,7 +78,35 @@ public class TasksView extends Composite implements TasksPresenter.View {
 
         ListGroup folder = GWT.create( ListGroup.class );
         folder.add( generateFolderTitle( folderName, numberOfTasks ) );
+
+        for ( String task : tasksList ) {
+            folder.add( generateTask( folderName, task ) );
+        }
+        folder.add( generateNewTask( folderName ) );
         tasks.add( folder );
+    }
+
+    private ListGroupItem generateNewTask( String folderName ) {
+        ListGroupItem newTask = GWT.create( ListGroupItem.class );
+        InputGroup inputGroup = GWT.create( InputGroup.class );
+        inputGroup.add( createTextBox( folderName ) );
+        newTask.add( inputGroup );
+        return newTask;
+    }
+
+    private TextBox createTextBox( final String folderName ) {
+        final TextBox taskText = GWT.create( TextBox.class );
+        taskText.addKeyDownHandler( new KeyDownHandler() {
+            @Override
+            public void onKeyDown( KeyDownEvent event ) {
+                if ( event.getNativeKeyCode() == KeyCodes.KEY_ENTER ) {
+                    presenter.createTask( folderName, taskText.getText() );
+                }
+            }
+        } );
+        taskText.setWidth( "400" );
+        taskText.setPlaceholder( "New task..." );
+        return taskText;
     }
 
     private ListGroupItem generateFolderTitle( String name,
@@ -90,6 +118,26 @@ public class TasksView extends Composite implements TasksPresenter.View {
         number.setText( String.valueOf( numberOfTasks ) );
         folderTitle.add( number );
         return folderTitle;
+    }
+
+    private ListGroupItem generateTask( String folderName,
+                                        String taskText ) {
+        ListGroupItem tasks = GWT.create( ListGroupItem.class );
+        tasks.add( createTaskCheckbox( folderName, taskText ) );
+        return tasks;
+    }
+
+    private InlineCheckBox createTaskCheckbox( final String folderName,
+                                               final String taskText ) {
+        InlineCheckBox checkBox = GWT.create( InlineCheckBox.class );
+        checkBox.addClickHandler( new ClickHandler() {
+            @Override
+            public void onClick( ClickEvent event ) {
+                presenter.doneTask( folderName, taskText );
+            }
+        } );
+        checkBox.setText( taskText );
+        return checkBox;
     }
 
 }
