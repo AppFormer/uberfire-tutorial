@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2016 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,12 @@
 
 package org.uberfire.client.screens.popup;
 
-import org.uberfire.client.mvp.UberView;
-import org.uberfire.client.screens.TasksPresenter;
-
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+
+import org.uberfire.client.mvp.UberView;
+import org.uberfire.client.screens.TasksPresenter;
 
 @Dependent
 public class NewFolderPresenter {
@@ -56,5 +56,4 @@ public class NewFolderPresenter {
     public void close() {
         view.hide();
     }
-
 }

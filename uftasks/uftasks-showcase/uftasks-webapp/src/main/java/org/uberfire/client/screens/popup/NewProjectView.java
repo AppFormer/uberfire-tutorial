@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2016 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,75 +16,67 @@
 
 package org.uberfire.client.screens.popup;
 
-import com.google.gwt.core.client.GWT;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
+
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Widget;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.Modal;
+import org.gwtbootstrap3.client.ui.ModalBody;
 import org.gwtbootstrap3.client.ui.TextBox;
+import org.jboss.errai.ui.shared.api.annotations.DataField;
+import org.jboss.errai.ui.shared.api.annotations.EventHandler;
+import org.jboss.errai.ui.shared.api.annotations.Templated;
 
-import javax.annotation.PostConstruct;
-
-public class NewProjectView extends Composite
-        implements NewProjectPresenter.View {
-
-    interface Binder
-            extends
-            UiBinder<Widget, NewProjectView> {
-
-    }
-
-    private static Binder uiBinder = GWT.create( Binder.class );
-
-    @UiField
-    Modal popup;
-
-    @UiField
-    TextBox projectName;
-
-    @UiField
-    Button addGroup;
-
-    @UiField
-    Button cancel;
+@Dependent
+@Templated
+public class NewProjectView extends Composite implements NewProjectPresenter.View {
 
     private NewProjectPresenter presenter;
+
+    private Modal modal;
+
+    @Inject
+    @DataField("project-name")
+    TextBox projectNameTextBox;
+
+    @Inject
+    @DataField("ok-button")
+    Button okButton;
+
+    @Inject
+    @DataField("cancel-button")
+    Button cancelButton;
 
     @Override
     public void init( NewProjectPresenter presenter ) {
         this.presenter = presenter;
-    }
 
-    @PostConstruct
-    public void setup() {
-        initWidget( uiBinder.createAndBindUi( this ) );
-        cancel.addClickHandler( new ClickHandler() {
-            @Override
-            public void onClick( ClickEvent event ) {
-                presenter.close();
-            }
-        } );
-        addGroup.addClickHandler( new ClickHandler() {
-            @Override
-            public void onClick( ClickEvent event ) {
-                presenter.newProject( projectName.getText() );
-            }
-        } );
+        this.modal = new Modal();
+        final ModalBody body = new ModalBody();
+        body.add( this );
+        modal.add( body );
     }
 
     @Override
     public void show() {
-        popup.show();
+        modal.show();
     }
 
     @Override
     public void hide() {
-        popup.hide();
-        projectName.setText( "" );
+        modal.hide();
+        projectNameTextBox.setText( "" );
     }
 
+    @EventHandler("ok-button")
+    public void addProject( ClickEvent event ) {
+        presenter.newProject( projectNameTextBox.getText() );
+    }
+
+    @EventHandler("cancel-button")
+    public void cancel( ClickEvent event ) {
+        presenter.close();
+    }
 }
