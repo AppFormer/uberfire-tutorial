@@ -1,5 +1,5 @@
 <%--
-  ~ Copyright 2012 JBoss Inc
+  ~ Copyright 2016 Red Hat, Inc. and/or its affiliates.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 <head>
   <title>Login - UberFire Showcase</title>
   <link rel="stylesheet" href="org.uberfire.UFTasksShowcase/patternfly/dist/css/patternfly.min.css">
+  <link rel="stylesheet" href="org.uberfire.UFTasksShowcase/patternfly/dist/css/patternfly-additions.min.css">
 </head>
 
 <body>

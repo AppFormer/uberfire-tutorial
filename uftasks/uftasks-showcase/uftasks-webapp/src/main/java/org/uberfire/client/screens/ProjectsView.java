@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2016 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,49 +16,32 @@
 
 package org.uberfire.client.screens;
 
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Widget;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.LinkedGroup;
 import org.gwtbootstrap3.client.ui.LinkedGroupItem;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.Dependent;
+import org.jboss.errai.ui.shared.api.annotations.DataField;
+import org.jboss.errai.ui.shared.api.annotations.EventHandler;
+import org.jboss.errai.ui.shared.api.annotations.Templated;
 
 @Dependent
+@Templated
 public class ProjectsView extends Composite implements ProjectsPresenter.View {
-
-    interface Binder
-            extends
-            UiBinder<Widget, ProjectsView> {
-
-    }
-
-    private static Binder uiBinder = GWT.create( Binder.class );
 
     private ProjectsPresenter presenter;
 
-    @UiField
+    @Inject
+    @DataField("new-project")
     Button newProject;
 
-    @UiField
+    @Inject
+    @DataField("projects")
     LinkedGroup projects;
-
-    @PostConstruct
-    public void setup() {
-        initWidget( uiBinder.createAndBindUi( this ) );
-        newProject.addClickHandler( new ClickHandler() {
-            @Override
-            public void onClick( ClickEvent event ) {
-                presenter.newProject();
-            }
-        } );
-    }
 
     @Override
     public void init( ProjectsPresenter presenter ) {
@@ -78,17 +61,16 @@ public class ProjectsView extends Composite implements ProjectsPresenter.View {
     }
 
     private LinkedGroupItem createProjectItems( final String projectName,
-                                                boolean active ) {
+                                                final boolean active ) {
         final LinkedGroupItem projectItem = GWT.create( LinkedGroupItem.class );
         projectItem.setText( projectName );
         projectItem.setActive( active );
-        projectItem.addClickHandler( new ClickHandler() {
-            @Override
-            public void onClick( ClickEvent event ) {
-                presenter.selectProject( projectName );
-            }
-        } );
+        projectItem.addClickHandler( ( event ) -> presenter.selectProject( projectName ) );
         return projectItem;
     }
 
+    @EventHandler("new-project")
+    public void newProject( ClickEvent event ) {
+        presenter.newProject();
+    }
 }

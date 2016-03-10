@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2016 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,40 +16,28 @@
 
 package org.uberfire.client.screens;
 
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
+
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Widget;
 import org.gwtbootstrap3.client.ui.Badge;
 import org.gwtbootstrap3.client.ui.ListGroup;
 import org.gwtbootstrap3.client.ui.ListGroupItem;
 import org.gwtbootstrap3.client.ui.constants.ListGroupItemType;
-
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.Dependent;
+import org.jboss.errai.ui.shared.api.annotations.DataField;
+import org.jboss.errai.ui.shared.api.annotations.Templated;
 
 @Dependent
+@Templated
 public class DashboardView extends Composite implements DashboardPresenter.View {
-
-    interface Binder
-            extends
-            UiBinder<Widget, DashboardView> {
-
-    }
-
-    private static Binder uiBinder = GWT.create( Binder.class );
 
     private DashboardPresenter presenter;
 
-    @UiField
+    @Inject
+    @DataField("projects")
     FlowPanel projects;
-
-    @PostConstruct
-    public void setup() {
-        initWidget( uiBinder.createAndBindUi( this ) );
-    }
 
     @Override
     public void init( DashboardPresenter presenter ) {
@@ -57,9 +45,9 @@ public class DashboardView extends Composite implements DashboardPresenter.View 
     }
 
     @Override
-    public void addProject( String project,
-                            String tasksCreated,
-                            String tasksDone ) {
+    public void addProject( final String project,
+                            final String tasksCreated,
+                            final String tasksDone ) {
         ListGroup projectGroup = GWT.create( ListGroup.class );
 
         projectGroup.add( createListGroupItem( ListGroupItemType.INFO, project.toUpperCase(), null ) );
@@ -74,10 +62,11 @@ public class DashboardView extends Composite implements DashboardPresenter.View 
         projects.clear();
     }
 
-    private ListGroupItem createListGroupItem( ListGroupItemType type,
-                                               String text,
-                                               String number ) {
+    private ListGroupItem createListGroupItem( final ListGroupItemType type,
+                                               final String text,
+                                               final String number ) {
         ListGroupItem item = GWT.create( ListGroupItem.class );
+
         item.setType( type );
         item.setText( text );
         if ( number != null ) {
@@ -85,7 +74,7 @@ public class DashboardView extends Composite implements DashboardPresenter.View 
             numberBadge.setText( number );
             item.add( numberBadge );
         }
+
         return item;
     }
-
 }

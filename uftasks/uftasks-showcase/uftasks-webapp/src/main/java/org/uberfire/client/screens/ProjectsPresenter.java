@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2016 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,13 @@
 
 package org.uberfire.client.screens;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+
+import com.google.gwt.user.client.Window;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.annotations.WorkbenchScreen;
@@ -23,12 +30,6 @@ import org.uberfire.client.mvp.UberView;
 import org.uberfire.client.screens.popup.NewProjectPresenter;
 import org.uberfire.shared.events.ProjectSelectedEvent;
 import org.uberfire.shared.model.Project;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
 
 @ApplicationScoped
 @WorkbenchScreen(identifier = "ProjectsPresenter")

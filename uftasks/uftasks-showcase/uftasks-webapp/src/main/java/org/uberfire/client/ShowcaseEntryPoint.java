@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2016 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
-import org.uberfire.client.resources.AppResource;
 import com.google.gwt.animation.client.Animation;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
@@ -31,10 +30,10 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 import org.uberfire.client.mvp.PlaceManager;
+import org.uberfire.client.resources.AppResource;
 import org.uberfire.client.views.pfly.menu.MainBrand;
 import org.uberfire.client.workbench.events.ApplicationReadyEvent;
 import org.uberfire.client.workbench.widgets.menu.WorkbenchMenuBar;
-import org.uberfire.mvp.Command;
 import org.uberfire.mvp.impl.DefaultPlaceRequest;
 import org.uberfire.workbench.model.menu.Menus;
 
@@ -58,20 +57,12 @@ public class ShowcaseEntryPoint {
     private void setupMenu( @Observes final ApplicationReadyEvent event ) {
         final Menus menus =
                 newTopLevelMenu( "UF Tasks" )
-                        .respondsWith( new Command() {
-                            @Override
-                            public void execute() {
-                                placeManager.goTo( new DefaultPlaceRequest( "TasksPerspective" ) );
-                            }
-                        } )
-                        .endMenu().
-                        newTopLevelMenu( "Dashboard" )
-                        .respondsWith( new Command() {
-                            @Override
-                            public void execute() {
-                                placeManager.goTo( new DefaultPlaceRequest( "DashboardPerspective" ) );
-                            }
-                        } )
+                        .respondsWith(
+                                () -> placeManager.goTo( new DefaultPlaceRequest( "TasksPerspective" ) ) )
+                        .endMenu()
+                        .newTopLevelMenu( "Dashboard" )
+                        .respondsWith(
+                                () -> placeManager.goTo( new DefaultPlaceRequest( "DashboardPerspective" ) ) )
                         .endMenu()
                         .build();
 

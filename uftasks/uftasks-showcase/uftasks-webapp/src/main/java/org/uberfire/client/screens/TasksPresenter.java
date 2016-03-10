@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2016 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,15 @@
 
 package org.uberfire.client.screens;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.annotations.WorkbenchScreen;
@@ -25,15 +34,6 @@ import org.uberfire.shared.events.ProjectSelectedEvent;
 import org.uberfire.shared.events.TaskCreated;
 import org.uberfire.shared.events.TaskDone;
 import org.uberfire.shared.model.Folder;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @ApplicationScoped
 @WorkbenchScreen(identifier = "TasksPresenter")
@@ -127,7 +127,7 @@ public class TasksPresenter {
         if ( folder != null ) {
             folder.removeTask( taskText );
         }
-        taskDoneEvent.fire( new TaskDone( currentSelectedProject, folderName, taskText ) );
+        taskDoneEvent.fire( new TaskDone(currentSelectedProject,folderName, taskText) );
         updateView();
     }
 
@@ -138,7 +138,7 @@ public class TasksPresenter {
         if ( folder != null ) {
             folder.addTask( task );
         }
-        taskCreatedEvent.fire( new TaskCreated( currentSelectedProject, folderName, task ) );
+        taskCreatedEvent.fire( new TaskCreated(currentSelectedProject,folderName, task) );
         updateView();
     }
 }
