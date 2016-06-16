@@ -18,18 +18,23 @@ package org.uberfire.client.screens;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
-import com.google.gwt.user.client.Window;
+import com.google.gwt.core.client.GWT;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.annotations.WorkbenchScreen;
 import org.uberfire.client.mvp.UberView;
 import org.uberfire.client.screens.popup.NewProjectPresenter;
+import org.uberfire.security.annotations.ResourceCheck;
 import org.uberfire.shared.events.ProjectSelectedEvent;
 import org.uberfire.shared.model.Project;
+
+import static org.uberfire.shared.authz.ProjectConstants.*;
+import static org.uberfire.shared.authz.UFTasksControllerHelper.*;
 
 @ApplicationScoped
 @WorkbenchScreen(identifier = "ProjectsPresenter")
@@ -38,6 +43,8 @@ public class ProjectsPresenter {
     public interface View extends UberView<ProjectsPresenter> {
 
         void clearProjects();
+
+        void enableProjectCreation(boolean enabled );
 
         void addProject( String projectName,
                          boolean selected );
@@ -64,19 +71,45 @@ public class ProjectsPresenter {
         return view;
     }
 
+    @PostConstruct
+    public void init() {
+        view.enableProjectCreation( false );
+
+        // The Project security API can be used to check project creation permission
+        projects().create().granted( () -> {
+            view.enableProjectCreation( true );
+        } );
+    }
+
+    // Creation of projects is restricted
+    @ResourceCheck(type=PROJECT, action=CREATE, onGranted="onCreateGranted", onDenied="onCreateDenied")
     public void newProject() {
         newProjectPresenter.show( this );
     }
 
-    public void createNewProject( String projectName ) {
-        projects.add( new Project( projectName ) );
-        updateView();
+    public void onCreateGranted() {
+        GWT.log("Project creation allowed");
     }
 
-    private void updateView() {
+    public void onCreateDenied() {
+        GWT.log("Project creation NOT allowed");
+    }
+
+    // Creation of projects is restricted
+    @ResourceCheck(type=PROJECT, action=CREATE)
+    public void createNewProject( String projectName ) {
+        projects.add( new Project( projectName ) );
+        this.updateView();
+    }
+
+    protected void updateView() {
         view.clearProjects();
         for ( Project project : projects ) {
-            view.addProject( project.getName(), project.isSelected() );
+
+            // The Project is displayed only if read permission is granted on it
+            project(project).read().granted( () -> {
+                view.addProject( project.getName(), project.isSelected() );
+            } );
         }
     }
 
@@ -93,6 +126,6 @@ public class ProjectsPresenter {
                 project.setSelected( false );
             }
         }
-        updateView();
+        this.updateView();
     }
 }

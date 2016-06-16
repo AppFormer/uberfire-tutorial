@@ -18,6 +18,7 @@ package org.uberfire.client;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
@@ -25,6 +26,7 @@ import javax.inject.Inject;
 import com.google.gwt.animation.client.Animation;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -34,7 +36,8 @@ import org.uberfire.client.resources.AppResource;
 import org.uberfire.client.views.pfly.menu.MainBrand;
 import org.uberfire.client.workbench.events.ApplicationReadyEvent;
 import org.uberfire.client.workbench.widgets.menu.WorkbenchMenuBar;
-import org.uberfire.mvp.impl.DefaultPlaceRequest;
+import org.uberfire.shared.authz.UFTasksControllerHelper;
+import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.workbench.model.menu.Menus;
 
 import static org.uberfire.workbench.model.menu.MenuFactory.*;
@@ -48,6 +51,9 @@ public class ShowcaseEntryPoint {
     @Inject
     private PlaceManager placeManager;
 
+    @Inject
+    private Event<NotificationEvent> workbenchNotification;
+
     @PostConstruct
     public void startApp() {
         AppResource.INSTANCE.CSS().ensureInjected();
@@ -57,16 +63,23 @@ public class ShowcaseEntryPoint {
     private void setupMenu( @Observes final ApplicationReadyEvent event ) {
         final Menus menus =
                 newTopLevelMenu( "UF Tasks" )
-                        .respondsWith(
-                                () -> placeManager.goTo( new DefaultPlaceRequest( "TasksPerspective" ) ) )
+                        .perspective( "TasksPerspective" )
                         .endMenu()
                         .newTopLevelMenu( "Dashboard" )
-                        .respondsWith(
-                                () -> placeManager.goTo( new DefaultPlaceRequest( "DashboardPerspective" ) ) )
+                        .perspective( "DashboardPerspective" )
+                        .endMenu()
+                        .newTopLevelMenu( "About" )
+                        .identifier( "uftasks.about" )
+                        .respondsWith(() -> Window.alert( "UF tasks showcase" ))
                         .endMenu()
                         .build();
 
         menubar.addMenus( menus );
+
+        // Check if the welcome notification permission is granted
+        if (UFTasksControllerHelper.sayhello()) {
+            workbenchNotification.fire(new NotificationEvent("Welcome to the UF tasks showcase", NotificationEvent.NotificationType.SUCCESS));
+        }
     }
 
     @Produces

@@ -16,7 +16,13 @@
 
 package org.uberfire.shared.model;
 
-public class Project {
+import java.util.List;
+
+import org.uberfire.security.Resource;
+import org.uberfire.security.ResourceType;
+import org.uberfire.shared.authz.UTTasksResourceType;
+
+public class Project implements Resource {
 
     private final String name;
     private boolean selected;
@@ -24,6 +30,21 @@ public class Project {
     public Project( String name ) {
         this.name = name;
         this.selected = false;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return name;
+    }
+
+    @Override
+    public ResourceType getResourceType() {
+        return UTTasksResourceType.PROJECT;
+    }
+
+    @Override
+    public List<Resource> getDependencies() {
+        return null;
     }
 
     public String getName() {
