@@ -23,7 +23,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
-import com.google.gwt.core.client.GWT;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.annotations.WorkbenchScreen;
@@ -88,11 +87,11 @@ public class ProjectsPresenter {
     }
 
     public void onCreateGranted() {
-        GWT.log("Project creation allowed");
+        //Project creation allowed
     }
 
     public void onCreateDenied() {
-        GWT.log("Project creation NOT allowed");
+       //Project creation NOT allowed
     }
 
     // Creation of projects is restricted
