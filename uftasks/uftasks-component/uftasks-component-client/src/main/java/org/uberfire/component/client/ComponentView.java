@@ -14,10 +14,17 @@ public class ComponentView extends Composite implements ComponentPresenter.View 
 
     private Label label = new Label( "Empty" );
 
+    private ComponentPresenter presenter;
+
     @PostConstruct
     public void setup() {
         initWidget( container );
         container.add( label );
+    }
+
+    @Override
+    public void init( ComponentPresenter presenter ) {
+        this.presenter = presenter;
     }
 
     @Override

@@ -1,25 +1,26 @@
 package org.uberfire.component.client;
 
+import org.jboss.errai.common.client.api.Caller;
+import org.jboss.errai.common.client.api.RemoteCallback;
+import org.uberfire.client.annotations.WorkbenchPartTitle;
+import org.uberfire.client.annotations.WorkbenchPartView;
+import org.uberfire.client.annotations.WorkbenchScreen;
+import org.uberfire.client.mvp.UberView;
+import org.uberfire.component.model.MyModel;
+import org.uberfire.component.service.MyService;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.google.gwt.user.client.ui.IsWidget;
-import org.jboss.errai.common.client.api.Caller;
-import org.jboss.errai.common.client.api.RemoteCallback;
-import org.uberfire.component.model.MyModel;
-import org.uberfire.component.service.MyService;
-import org.uberfire.client.annotations.WorkbenchPartTitle;
-import org.uberfire.client.annotations.WorkbenchPartView;
-import org.uberfire.client.annotations.WorkbenchScreen;
-
-@WorkbenchScreen(identifier = "ComponentPresenter")
+@WorkbenchScreen( identifier = "ComponentPresenter" )
 @Dependent
 public class ComponentPresenter {
 
-    public interface View extends IsWidget {
+    public interface View extends UberView<ComponentPresenter> {
 
         void setValue( String value );
+
     }
 
     @Inject
@@ -44,7 +45,7 @@ public class ComponentPresenter {
     }
 
     @WorkbenchPartView
-    public IsWidget getView() {
+    public UberView<ComponentPresenter> getView() {
         return view;
     }
 
