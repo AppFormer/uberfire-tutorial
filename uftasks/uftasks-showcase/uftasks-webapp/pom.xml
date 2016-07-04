@@ -16,7 +16,6 @@
   <description>UFTasks WebApp</description>
 
   <properties>
-    <errai.version>${version.org.jboss.errai}</errai.version>
     <version.org.wildfly.gwt.sdm>10.0.0.Final</version.org.wildfly.gwt.sdm>
     <!-- Add the absolute path for $JBOSS_HOME below to manage another instance -->
     <errai.jboss.home>${project.build.directory}/wildfly-${version.org.wildfly.gwt.sdm}</errai.jboss.home>
