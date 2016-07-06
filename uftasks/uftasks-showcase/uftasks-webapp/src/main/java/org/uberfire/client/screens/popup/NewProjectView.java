@@ -16,46 +16,57 @@
 
 package org.uberfire.client.screens.popup;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Event;
+import org.gwtbootstrap3.client.ui.Modal;
+import org.gwtbootstrap3.client.ui.ModalBody;
+import org.jboss.errai.common.client.dom.Button;
+import org.jboss.errai.common.client.dom.Div;
+import org.jboss.errai.common.client.dom.HTMLElement;
+import org.jboss.errai.common.client.dom.Input;
+import org.jboss.errai.common.client.ui.ElementWrapperWidget;
+import org.jboss.errai.ui.shared.api.annotations.DataField;
+import org.jboss.errai.ui.shared.api.annotations.EventHandler;
+import org.jboss.errai.ui.shared.api.annotations.SinkNative;
+import org.jboss.errai.ui.shared.api.annotations.Templated;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.user.client.ui.Composite;
-import org.gwtbootstrap3.client.ui.Button;
-import org.gwtbootstrap3.client.ui.Modal;
-import org.gwtbootstrap3.client.ui.ModalBody;
-import org.gwtbootstrap3.client.ui.TextBox;
-import org.jboss.errai.ui.shared.api.annotations.DataField;
-import org.jboss.errai.ui.shared.api.annotations.EventHandler;
-import org.jboss.errai.ui.shared.api.annotations.Templated;
-
 @Dependent
 @Templated
-public class NewProjectView extends Composite implements NewProjectPresenter.View {
+public class NewProjectView implements NewProjectPresenter.View {
 
     private NewProjectPresenter presenter;
 
     private Modal modal;
 
     @Inject
-    @DataField("project-name")
-    TextBox projectNameTextBox;
+    @DataField
+    Div view;
 
     @Inject
-    @DataField("ok-button")
+    @DataField( "project-name" )
+    Input projectNameTextBox;
+
+    @Inject
+    @DataField( "ok-button" )
     Button okButton;
 
     @Inject
-    @DataField("cancel-button")
+    @DataField( "cancel-button" )
     Button cancelButton;
 
     @Override
     public void init( NewProjectPresenter presenter ) {
         this.presenter = presenter;
+        createModal();
+    }
 
-        this.modal = new Modal();
-        final ModalBody body = new ModalBody();
-        body.add( this );
+    private void createModal() {
+        this.modal = GWT.create( Modal.class );
+        final ModalBody body = GWT.create( ModalBody.class );
+        body.add( ElementWrapperWidget.getWidget( view ) );
         modal.add( body );
     }
 
@@ -67,16 +78,23 @@ public class NewProjectView extends Composite implements NewProjectPresenter.Vie
     @Override
     public void hide() {
         modal.hide();
-        projectNameTextBox.setText( "" );
+        projectNameTextBox.setValue( "" );
     }
 
-    @EventHandler("ok-button")
-    public void addProject( ClickEvent event ) {
-        presenter.newProject( projectNameTextBox.getText() );
+    @SinkNative( Event.ONCLICK )
+    @EventHandler( "ok-button" )
+    public void addProject( Event event ) {
+        presenter.newProject( projectNameTextBox.getValue() );
     }
 
-    @EventHandler("cancel-button")
-    public void cancel( ClickEvent event ) {
+    @SinkNative( Event.ONCLICK )
+    @EventHandler( "cancel-button" )
+    public void cancel( Event event ) {
         presenter.close();
+    }
+
+    @Override
+    public HTMLElement getElement() {
+        return view;
     }
 }

@@ -19,6 +19,7 @@ package org.uberfire.client.screens;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.annotations.WorkbenchScreen;
+import org.uberfire.client.mvp.UberElement;
 import org.uberfire.client.mvp.UberView;
 import org.uberfire.lifecycle.OnOpen;
 import org.uberfire.shared.events.TaskCreated;
@@ -34,7 +35,7 @@ import java.util.Map;
 @WorkbenchScreen(identifier = "DashboardPresenter")
 public class DashboardPresenter {
 
-    public interface View extends UberView<DashboardPresenter> {
+    public interface View extends UberElement<DashboardPresenter> {
 
         void addProject( String project,
                          String tasksCreated,
@@ -54,7 +55,7 @@ public class DashboardPresenter {
     }
 
     @WorkbenchPartView
-    public UberView<DashboardPresenter> getView() {
+    public UberElement<DashboardPresenter> getView() {
         return view;
     }
 

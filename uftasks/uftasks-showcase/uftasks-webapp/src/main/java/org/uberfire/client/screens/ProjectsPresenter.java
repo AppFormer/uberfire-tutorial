@@ -16,34 +16,38 @@
 
 package org.uberfire.client.screens;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.annotations.WorkbenchScreen;
-import org.uberfire.client.mvp.UberView;
+import org.uberfire.client.mvp.UberElement;
 import org.uberfire.client.screens.popup.NewProjectPresenter;
 import org.uberfire.security.annotations.ResourceCheck;
 import org.uberfire.shared.events.ProjectSelectedEvent;
 import org.uberfire.shared.model.Project;
 
-import static org.uberfire.shared.authz.ProjectConstants.*;
-import static org.uberfire.shared.authz.UFTasksControllerHelper.*;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.uberfire.shared.authz.ProjectConstants.CREATE;
+import static org.uberfire.shared.authz.ProjectConstants.PROJECT;
+import static org.uberfire.shared.authz.UFTasksControllerHelper.project;
+import static org.uberfire.shared.authz.UFTasksControllerHelper.projects;
 
 @ApplicationScoped
-@WorkbenchScreen(identifier = "ProjectsPresenter")
+@WorkbenchScreen( identifier = "ProjectsPresenter" )
 public class ProjectsPresenter {
 
-    public interface View extends UberView<ProjectsPresenter> {
+    public interface View extends UberElement<ProjectsPresenter> {
 
         void clearProjects();
 
-        void enableProjectCreation(boolean enabled );
+        void disableProjectCreation();
+
+        void enableProjectCreation();
 
         void addProject( String projectName,
                          boolean selected );
@@ -66,22 +70,22 @@ public class ProjectsPresenter {
     }
 
     @WorkbenchPartView
-    public UberView<ProjectsPresenter> getView() {
+    public UberElement<ProjectsPresenter> getView() {
         return view;
     }
 
     @PostConstruct
     public void init() {
-        view.enableProjectCreation( false );
+        view.disableProjectCreation();
 
         // The Project security API can be used to check project creation permission
         projects().create().granted( () -> {
-            view.enableProjectCreation( true );
+            view.enableProjectCreation();
         } );
     }
 
     // Creation of projects is restricted
-    @ResourceCheck(type=PROJECT, action=CREATE, onGranted="onCreateGranted", onDenied="onCreateDenied")
+    @ResourceCheck( type = PROJECT, action = CREATE, onGranted = "onCreateGranted", onDenied = "onCreateDenied" )
     public void newProject() {
         newProjectPresenter.show( this );
     }
@@ -91,11 +95,11 @@ public class ProjectsPresenter {
     }
 
     public void onCreateDenied() {
-       //Project creation NOT allowed
+        //Project creation NOT allowed
     }
 
     // Creation of projects is restricted
-    @ResourceCheck(type=PROJECT, action=CREATE)
+    @ResourceCheck( type = PROJECT, action = CREATE )
     public void createNewProject( String projectName ) {
         projects.add( new Project( projectName ) );
         this.updateView();
@@ -104,9 +108,8 @@ public class ProjectsPresenter {
     protected void updateView() {
         view.clearProjects();
         for ( Project project : projects ) {
-
             // The Project is displayed only if read permission is granted on it
-            project(project).read().granted( () -> {
+            project( project ).read().granted( () -> {
                 view.addProject( project.getName(), project.isSelected() );
             } );
         }
