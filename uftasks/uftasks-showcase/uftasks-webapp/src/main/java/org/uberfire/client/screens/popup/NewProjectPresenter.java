@@ -16,23 +16,24 @@
 
 package org.uberfire.client.screens.popup;
 
+import org.uberfire.client.screens.ProjectsPresenter;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
-
-import org.uberfire.client.mvp.UberView;
-import org.uberfire.client.screens.ProjectsPresenter;
 
 @Dependent
 public class NewProjectPresenter {
 
     private ProjectsPresenter projectsPresenter;
 
-    public interface View extends UberView<NewProjectPresenter> {
+    public interface View {
 
         void show();
 
         void hide();
+
+        void init( NewProjectPresenter presenter );
     }
 
     @Inject
