@@ -16,66 +16,83 @@
 
 package org.uberfire.client.screens;
 
+import com.google.gwt.user.client.Event;
+import org.jboss.errai.common.client.dom.*;
+import org.jboss.errai.ioc.client.api.ManagedInstance;
+import org.jboss.errai.ui.shared.api.annotations.DataField;
+import org.jboss.errai.ui.shared.api.annotations.EventHandler;
+import org.jboss.errai.ui.shared.api.annotations.SinkNative;
+import org.jboss.errai.ui.shared.api.annotations.Templated;
+import org.uberfire.client.screens.widgets.ProjectItem;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.user.client.ui.Composite;
-import org.gwtbootstrap3.client.ui.Button;
-import org.gwtbootstrap3.client.ui.LinkedGroup;
-import org.gwtbootstrap3.client.ui.LinkedGroupItem;
-import org.jboss.errai.ui.shared.api.annotations.DataField;
-import org.jboss.errai.ui.shared.api.annotations.EventHandler;
-import org.jboss.errai.ui.shared.api.annotations.Templated;
+import static org.jboss.errai.common.client.dom.DOMUtil.removeAllChildren;
 
 @Dependent
 @Templated
-public class ProjectsView extends Composite implements ProjectsPresenter.View {
+public class ProjectsView implements ProjectsPresenter.View {
 
     private ProjectsPresenter presenter;
 
     @Inject
-    @DataField("new-project")
+    Document document;
+
+    @Inject
+    @DataField( "projects-view" )
+    Div view;
+
+    @Inject
+    @DataField( "new-project" )
     Button newProject;
 
     @Inject
-    @DataField("projects")
-    LinkedGroup projects;
+    @DataField( "projects-list" )
+    UnorderedList projectsList;
+
+    @Inject
+    ManagedInstance<ProjectItem> projects;
 
     @Override
     public void init( ProjectsPresenter presenter ) {
         this.presenter = presenter;
     }
 
-    @Override
-    public void clearProjects() {
-        projects.clear();
+    @SinkNative( Event.ONCLICK )
+    @EventHandler( "new-project" )
+    public void addProviderType( final Event event ) {
+        presenter.newProject();
     }
 
     @Override
-    public void enableProjectCreation( boolean enabled ) {
-        newProject.setEnabled( enabled );
+    public void clearProjects() {
+        removeAllChildren( projectsList );
+    }
+
+    @Override
+    public void disableProjectCreation() {
+        newProject.setDisabled( true );
+    }
+
+    @Override
+    public void enableProjectCreation() {
+        newProject.setDisabled( false );
     }
 
     @Override
     public void addProject( final String projectName,
                             final boolean active ) {
-        final LinkedGroupItem projectItem = createProjectItems( projectName, active );
-        projects.add( projectItem );
+
+        ProjectItem projectItem = projects.get();
+        projectItem.init( projectName,
+                          active,
+                          () -> presenter.selectProject( projectName ) );
+        projectsList.appendChild( projectItem.getElement() );
     }
 
-    private LinkedGroupItem createProjectItems(final String projectName,
-                                               final boolean active ) {
-        final LinkedGroupItem projectItem = GWT.create( LinkedGroupItem.class );
-        projectItem.setText( projectName );
-        projectItem.setActive( active );
-        projectItem.addClickHandler( ( event ) -> presenter.selectProject( projectName ) );
-        return projectItem;
-    }
-
-    @EventHandler("new-project")
-    public void newProject( ClickEvent event ) {
-        presenter.newProject();
+    @Override
+    public HTMLElement getElement() {
+        return view;
     }
 }

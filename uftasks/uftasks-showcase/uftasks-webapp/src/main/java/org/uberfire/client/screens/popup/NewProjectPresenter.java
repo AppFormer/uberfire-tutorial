@@ -20,6 +20,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
+import org.uberfire.client.mvp.UberElement;
 import org.uberfire.client.mvp.UberView;
 import org.uberfire.client.screens.ProjectsPresenter;
 
@@ -28,7 +29,7 @@ public class NewProjectPresenter {
 
     private ProjectsPresenter projectsPresenter;
 
-    public interface View extends UberView<NewProjectPresenter> {
+    public interface View extends UberElement<NewProjectPresenter> {
 
         void show();
 

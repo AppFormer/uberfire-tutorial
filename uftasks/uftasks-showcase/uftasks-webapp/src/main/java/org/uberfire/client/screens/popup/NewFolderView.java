@@ -16,47 +16,58 @@
 
 package org.uberfire.client.screens.popup;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.user.client.Event;
+import org.gwtbootstrap3.client.ui.Modal;
+import org.gwtbootstrap3.client.ui.ModalBody;
+import org.jboss.errai.common.client.dom.Button;
+import org.jboss.errai.common.client.dom.Div;
+import org.jboss.errai.common.client.dom.HTMLElement;
+import org.jboss.errai.common.client.dom.Input;
+import org.jboss.errai.common.client.ui.ElementWrapperWidget;
+import org.jboss.errai.ui.shared.api.annotations.DataField;
+import org.jboss.errai.ui.shared.api.annotations.EventHandler;
+import org.jboss.errai.ui.shared.api.annotations.SinkNative;
+import org.jboss.errai.ui.shared.api.annotations.Templated;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.user.client.ui.Composite;
-import org.gwtbootstrap3.client.ui.Button;
-import org.gwtbootstrap3.client.ui.Modal;
-import org.gwtbootstrap3.client.ui.ModalBody;
-import org.gwtbootstrap3.client.ui.TextBox;
-import org.jboss.errai.ui.shared.api.annotations.DataField;
-import org.jboss.errai.ui.shared.api.annotations.EventHandler;
-import org.jboss.errai.ui.shared.api.annotations.Templated;
-
 @Dependent
 @Templated
-public class NewFolderView extends Composite
-        implements NewFolderPresenter.View {
+public class NewFolderView implements NewFolderPresenter.View {
 
     private NewFolderPresenter presenter;
 
     private Modal modal;
 
     @Inject
-    @DataField("folder-name")
-    TextBox folderNameTextBox;
+    @DataField
+    Div view;
 
     @Inject
-    @DataField("ok-button")
+    @DataField( "folder-name" )
+    Input folderNameTextBox;
+
+    @Inject
+    @DataField( "ok-button" )
     Button okButton;
 
     @Inject
-    @DataField("cancel-button")
+    @DataField( "cancel-button" )
     Button cancelButton;
 
     @Override
     public void init( NewFolderPresenter presenter ) {
         this.presenter = presenter;
+        createModal();
+    }
 
-        this.modal = new Modal();
-        final ModalBody body = new ModalBody();
-        body.add( this );
+    private void createModal() {
+        this.modal = GWT.create( Modal.class );
+        final ModalBody body = GWT.create( ModalBody.class );
+        body.add( ElementWrapperWidget.getWidget( view ) );
         modal.add( body );
     }
 
@@ -68,16 +79,22 @@ public class NewFolderView extends Composite
     @Override
     public void hide() {
         modal.hide();
-        folderNameTextBox.setText( "" );
+        folderNameTextBox.setValue( "" );
     }
 
-    @EventHandler("ok-button")
-    public void addFolder( ClickEvent event ) {
-        presenter.newFolder( folderNameTextBox.getText() );
+    @SinkNative( Event.ONCLICK )
+    @EventHandler( "ok-button" )
+    public void addFolder( Event event ) {
+        presenter.newFolder( folderNameTextBox.getValue() );
     }
 
-    @EventHandler("cancel-button")
-    public void cancel( ClickEvent event ) {
+    @EventHandler( "cancel-button" )
+    public void cancel( Event event ) {
         presenter.close();
+    }
+
+    @Override
+    public HTMLElement getElement() {
+        return view;
     }
 }
