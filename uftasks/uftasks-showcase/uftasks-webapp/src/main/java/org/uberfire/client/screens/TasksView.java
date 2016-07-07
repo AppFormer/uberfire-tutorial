@@ -16,129 +16,96 @@
 
 package org.uberfire.client.screens;
 
-import java.util.List;
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
-
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
-import org.gwtbootstrap3.client.ui.Badge;
-import org.gwtbootstrap3.client.ui.Button;
-import org.gwtbootstrap3.client.ui.InlineCheckBox;
-import org.gwtbootstrap3.client.ui.InputGroup;
-import org.gwtbootstrap3.client.ui.ListGroup;
-import org.gwtbootstrap3.client.ui.ListGroupItem;
-import org.gwtbootstrap3.client.ui.TextBox;
-import org.gwtbootstrap3.client.ui.constants.ListGroupItemType;
+import org.jboss.errai.common.client.dom.Button;
+import org.jboss.errai.common.client.dom.Div;
+import org.jboss.errai.common.client.dom.Document;
+import org.jboss.errai.common.client.dom.HTMLElement;
+import org.jboss.errai.ioc.client.api.ManagedInstance;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
 import org.jboss.errai.ui.shared.api.annotations.EventHandler;
 import org.jboss.errai.ui.shared.api.annotations.Templated;
+import org.uberfire.client.screens.widgets.FolderItem;
+
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
+import java.util.List;
+
+import static org.jboss.errai.common.client.dom.DOMUtil.removeAllChildren;
 
 @Dependent
 @Templated
-public class TasksView extends Composite implements TasksPresenter.View {
+public class TasksView implements TasksPresenter.View {
 
     private TasksPresenter presenter;
 
     @Inject
-    @DataField("new-folder")
+    Document document;
+
+    @Inject
+    @DataField( "view" )
+    Div view;
+
+    @Inject
+    @DataField( "new-folder" )
     Button newFolder;
 
     @Inject
-    @DataField("tasks")
-    FlowPanel tasks;
+    @DataField( "tasks" )
+    Div tasks;
+
+    @Inject
+    ManagedInstance<FolderItem> folders;
 
     @Override
     public void init( final TasksPresenter presenter ) {
         this.presenter = presenter;
-        this.newFolder.setVisible( false );
+        this.newFolder.setDisabled( true );
     }
 
     @Override
     public void activateNewFolder() {
-        newFolder.setVisible( true );
+        newFolder.setDisabled( false );
     }
 
     @Override
     public void clearTasks() {
-        tasks.clear();
+        removeAllChildren( tasks );
     }
 
     @Override
     public void newFolder( String folderName,
-                           Integer numberOfTasks,
+                           String numberOfTasks,
                            List<String> tasksList ) {
+        FolderItem folderItem = createFolder( folderName, numberOfTasks );
+        createTasks( folderName, tasksList, folderItem );
 
-        ListGroup folder = GWT.create( ListGroup.class );
-        folder.add( generateFolderTitle( folderName, numberOfTasks ) );
+        tasks.appendChild( folderItem.getElement() );
+    }
+
+    private void createTasks( String folderName, List<String> tasksList, FolderItem folderItem ) {
         for ( String task : tasksList ) {
-            folder.add( generateTask( folderName, task ) );
+            folderItem.createTask( task,
+                                   () -> presenter.doneTask( folderName, task ) );
         }
-        folder.add( generateNewTask( folderName ) );
-
-        tasks.add( folder );
     }
 
-    private ListGroupItem generateNewTask( String folderName ) {
-        ListGroupItem newTask = GWT.create( ListGroupItem.class );
-
-        InputGroup inputGroup = GWT.create( InputGroup.class );
-        inputGroup.add( createTextBox( folderName ) );
-
-        newTask.add( inputGroup );
-
-        return newTask;
+    private FolderItem createFolder( String folderName, String numberOfTasks ) {
+        FolderItem folderItem = folders.get();
+        folderItem.init( folderName,
+                         numberOfTasks,
+                         newTaskText -> presenter.createTask( folderName, newTaskText ) );
+        return folderItem;
     }
 
-    private TextBox createTextBox( final String folderName ) {
-        final TextBox taskText = GWT.create( TextBox.class );
-        taskText.setWidth( "400" );
-        taskText.setPlaceholder( "New task..." );
-        taskText.addKeyDownHandler( event -> {
-            if ( event.getNativeKeyCode() == KeyCodes.KEY_ENTER ) {
-                presenter.createTask( folderName, taskText.getText() );
-            }
-        } );
 
-        return taskText;
-    }
-
-    private ListGroupItem generateFolderTitle( String name,
-                                               Integer numberOfTasks ) {
-        ListGroupItem folderTitle = GWT.create( ListGroupItem.class );
-        folderTitle.setText( name );
-        folderTitle.setType( ListGroupItemType.INFO );
-
-        Badge number = GWT.create( Badge.class );
-        number.setText( String.valueOf( numberOfTasks ) );
-
-        folderTitle.add( number );
-
-        return folderTitle;
-    }
-
-    private ListGroupItem generateTask( String folderName,
-                                        String taskText ) {
-        ListGroupItem tasks = GWT.create( ListGroupItem.class );
-        tasks.add( createTaskCheckbox( folderName, taskText ) );
-
-        return tasks;
-    }
-
-    private InlineCheckBox createTaskCheckbox( final String folderName,
-                                               final String taskText ) {
-        InlineCheckBox checkBox = GWT.create( InlineCheckBox.class );
-        checkBox.setText( taskText );
-        checkBox.addClickHandler( event -> presenter.doneTask( folderName, taskText ) );
-
-        return checkBox;
-    }
-
-    @EventHandler("new-folder")
+    @EventHandler( "new-folder" )
     public void newFolderClick( ClickEvent event ) {
         presenter.showNewFolder();
+    }
+
+    @Override
+    public HTMLElement getElement() {
+        return view;
     }
 }

@@ -16,21 +16,22 @@
 
 package org.uberfire.client.screens.popup;
 
+import org.uberfire.client.screens.TasksPresenter;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import org.uberfire.client.mvp.UberView;
-import org.uberfire.client.screens.TasksPresenter;
-
 @Dependent
 public class NewFolderPresenter {
 
-    public interface View extends UberView<NewFolderPresenter> {
+    public interface View {
 
         void show();
 
         void hide();
+
+        void init( NewFolderPresenter presenter );
     }
 
     @Inject

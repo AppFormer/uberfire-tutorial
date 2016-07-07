@@ -16,46 +16,37 @@
 
 package org.uberfire.client.screens.popup;
 
+import com.google.gwt.core.client.GWT;
+import org.gwtbootstrap3.client.ui.Modal;
+import org.gwtbootstrap3.client.ui.ModalBody;
+import org.jboss.errai.common.client.ui.ElementWrapperWidget;
+import org.jboss.errai.ui.shared.api.annotations.Templated;
+
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.user.client.ui.Composite;
-import org.gwtbootstrap3.client.ui.Button;
-import org.gwtbootstrap3.client.ui.Modal;
-import org.gwtbootstrap3.client.ui.ModalBody;
-import org.gwtbootstrap3.client.ui.TextBox;
-import org.jboss.errai.ui.shared.api.annotations.DataField;
-import org.jboss.errai.ui.shared.api.annotations.EventHandler;
-import org.jboss.errai.ui.shared.api.annotations.Templated;
-
 @Dependent
-@Templated
-public class NewProjectView extends Composite implements NewProjectPresenter.View {
+public class NewProjectView implements NewProjectPresenter.View {
 
     private NewProjectPresenter presenter;
 
     private Modal modal;
 
     @Inject
-    @DataField("project-name")
-    TextBox projectNameTextBox;
-
-    @Inject
-    @DataField("ok-button")
-    Button okButton;
-
-    @Inject
-    @DataField("cancel-button")
-    Button cancelButton;
+    NewProjectContentView contentView;
 
     @Override
     public void init( NewProjectPresenter presenter ) {
         this.presenter = presenter;
+        contentView.init( projectName -> presenter.newProject( projectName ),
+                          () -> presenter.close() );
+        createModal();
+    }
 
-        this.modal = new Modal();
-        final ModalBody body = new ModalBody();
-        body.add( this );
+    private void createModal() {
+        this.modal = GWT.create( Modal.class );
+        final ModalBody body = GWT.create( ModalBody.class );
+        body.add( ElementWrapperWidget.getWidget( contentView.getElement() ) );
         modal.add( body );
     }
 
@@ -66,17 +57,8 @@ public class NewProjectView extends Composite implements NewProjectPresenter.Vie
 
     @Override
     public void hide() {
+        contentView.clearContent();
         modal.hide();
-        projectNameTextBox.setText( "" );
     }
 
-    @EventHandler("ok-button")
-    public void addProject( ClickEvent event ) {
-        presenter.newProject( projectNameTextBox.getText() );
-    }
-
-    @EventHandler("cancel-button")
-    public void cancel( ClickEvent event ) {
-        presenter.close();
-    }
 }
