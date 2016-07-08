@@ -1,12 +1,5 @@
 package org.uberfire.client;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
-
-import org.uberfire.client.resources.AppResource;
 import com.google.gwt.animation.client.Animation;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
@@ -15,14 +8,19 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.Widget;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 import org.uberfire.client.mvp.PlaceManager;
+import org.uberfire.client.resources.AppResource;
 import org.uberfire.client.views.pfly.menu.MainBrand;
 import org.uberfire.client.workbench.events.ApplicationReadyEvent;
 import org.uberfire.client.workbench.widgets.menu.WorkbenchMenuBar;
-import org.uberfire.mvp.Command;
-import org.uberfire.mvp.impl.DefaultPlaceRequest;
 import org.uberfire.workbench.model.menu.Menus;
 
-import static org.uberfire.workbench.model.menu.MenuFactory.*;
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
+
+import static org.uberfire.workbench.model.menu.MenuFactory.newTopLevelMenu;
 
 @EntryPoint
 public class ShowcaseEntryPoint {
@@ -35,7 +33,6 @@ public class ShowcaseEntryPoint {
 
     @PostConstruct
     public void startApp() {
-        AppResource.INSTANCE.CSS().ensureInjected();
         hideLoadingPopup();
     }
 
@@ -57,17 +54,13 @@ public class ShowcaseEntryPoint {
     @Produces
     @ApplicationScoped
     public MainBrand createBrandLogo() {
-        return new MainBrand() {
-            @Override
-            public Widget asWidget() {
-                return new Image( AppResource.INSTANCE.images().ufBrandLogo() );
-            }
-        };
+        return () -> new Image( AppResource.INSTANCE.images().ufBrandLogo() );
     }
 
     //Fade out the "Loading application" pop-up
     private void hideLoadingPopup() {
         final Element e = RootPanel.get( "loading" ).getElement();
+
 
         new Animation() {
 
