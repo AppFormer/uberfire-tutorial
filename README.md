@@ -1,5 +1,10 @@
 #Uberfire Tutorial
 
+##demo
+Uberfire Demo Project from "Getting Started" Tutorial
+
+http://www.uberfireframework.org/docs/
+
 ##uftasks
 Uberfire Task Manager project from Uberfire Docs Tutorial.
 
