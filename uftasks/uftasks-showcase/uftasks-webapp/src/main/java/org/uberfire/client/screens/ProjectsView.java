@@ -17,8 +17,11 @@
 package org.uberfire.client.screens;
 
 import com.google.gwt.user.client.Event;
-import org.jboss.errai.common.client.dom.*;
+import org.jboss.errai.common.client.dom.Button;
+import org.jboss.errai.common.client.dom.Document;
+import org.jboss.errai.common.client.dom.UnorderedList;
 import org.jboss.errai.ioc.client.api.ManagedInstance;
+import org.jboss.errai.ui.client.local.api.IsElement;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
 import org.jboss.errai.ui.shared.api.annotations.EventHandler;
 import org.jboss.errai.ui.shared.api.annotations.SinkNative;
@@ -32,16 +35,12 @@ import static org.jboss.errai.common.client.dom.DOMUtil.removeAllChildren;
 
 @Dependent
 @Templated
-public class ProjectsView implements ProjectsPresenter.View {
+public class ProjectsView implements ProjectsPresenter.View, IsElement {
 
     private ProjectsPresenter presenter;
 
     @Inject
     Document document;
-
-    @Inject
-    @DataField( "projects-view" )
-    Div view;
 
     @Inject
     @DataField( "new-project" )
@@ -91,8 +90,4 @@ public class ProjectsView implements ProjectsPresenter.View {
         projectsList.appendChild( projectItem.getElement() );
     }
 
-    @Override
-    public HTMLElement getElement() {
-        return view;
-    }
 }

@@ -17,11 +17,11 @@
 package org.uberfire.client.screens.popup;
 
 import com.google.gwt.user.client.Event;
-import org.jboss.errai.common.client.api.IsElement;
 import org.jboss.errai.common.client.dom.Button;
 import org.jboss.errai.common.client.dom.Div;
 import org.jboss.errai.common.client.dom.HTMLElement;
 import org.jboss.errai.common.client.dom.Input;
+import org.jboss.errai.ui.client.local.api.IsElement;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
 import org.jboss.errai.ui.shared.api.annotations.EventHandler;
 import org.jboss.errai.ui.shared.api.annotations.SinkNative;
@@ -35,10 +35,6 @@ import javax.inject.Inject;
 @Dependent
 @Templated
 public class NewFolderContentView implements IsElement {
-
-    @Inject
-    @DataField
-    Div view;
 
     @Inject
     @DataField( "folder-name" )
@@ -76,8 +72,4 @@ public class NewFolderContentView implements IsElement {
         cancel.execute();
     }
 
-    @Override
-    public HTMLElement getElement() {
-        return view;
-    }
 }

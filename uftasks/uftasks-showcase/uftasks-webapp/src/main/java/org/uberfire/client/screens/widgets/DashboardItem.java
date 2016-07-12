@@ -16,10 +16,9 @@
 
 package org.uberfire.client.screens.widgets;
 
-import org.jboss.errai.ui.client.local.api.IsElement;
-import org.jboss.errai.common.client.dom.HTMLElement;
 import org.jboss.errai.common.client.dom.Span;
 import org.jboss.errai.common.client.dom.UnorderedList;
+import org.jboss.errai.ui.client.local.api.IsElement;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
 import org.jboss.errai.ui.shared.api.annotations.Templated;
 

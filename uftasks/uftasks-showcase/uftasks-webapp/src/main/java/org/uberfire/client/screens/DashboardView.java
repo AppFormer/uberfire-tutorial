@@ -19,6 +19,7 @@ package org.uberfire.client.screens;
 import org.jboss.errai.common.client.dom.Div;
 import org.jboss.errai.common.client.dom.HTMLElement;
 import org.jboss.errai.ioc.client.api.ManagedInstance;
+import org.jboss.errai.ui.client.local.api.IsElement;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
 import org.jboss.errai.ui.shared.api.annotations.Templated;
 import org.uberfire.client.screens.widgets.DashboardItem;
@@ -30,7 +31,7 @@ import static org.jboss.errai.common.client.dom.DOMUtil.removeAllChildren;
 
 @Dependent
 @Templated
-public class DashboardView implements DashboardPresenter.View {
+public class DashboardView implements DashboardPresenter.View, IsElement {
 
     private DashboardPresenter presenter;
 
@@ -63,8 +64,4 @@ public class DashboardView implements DashboardPresenter.View {
         removeAllChildren( projects );
     }
 
-    @Override
-    public HTMLElement getElement() {
-        return projects;
-    }
 }

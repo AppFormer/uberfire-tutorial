@@ -22,6 +22,7 @@ import org.jboss.errai.common.client.dom.Div;
 import org.jboss.errai.common.client.dom.Document;
 import org.jboss.errai.common.client.dom.HTMLElement;
 import org.jboss.errai.ioc.client.api.ManagedInstance;
+import org.jboss.errai.ui.client.local.api.IsElement;
 import org.jboss.errai.ui.shared.api.annotations.DataField;
 import org.jboss.errai.ui.shared.api.annotations.EventHandler;
 import org.jboss.errai.ui.shared.api.annotations.Templated;
@@ -35,16 +36,12 @@ import static org.jboss.errai.common.client.dom.DOMUtil.removeAllChildren;
 
 @Dependent
 @Templated
-public class TasksView implements TasksPresenter.View {
+public class TasksView implements TasksPresenter.View, IsElement {
 
     private TasksPresenter presenter;
 
     @Inject
     Document document;
-
-    @Inject
-    @DataField( "view" )
-    Div view;
 
     @Inject
     @DataField( "new-folder" )
@@ -104,8 +101,4 @@ public class TasksView implements TasksPresenter.View {
         presenter.showNewFolder();
     }
 
-    @Override
-    public HTMLElement getElement() {
-        return view;
-    }
 }
