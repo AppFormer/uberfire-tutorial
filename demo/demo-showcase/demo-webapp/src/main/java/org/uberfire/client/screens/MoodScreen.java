@@ -16,29 +16,33 @@
 
 package org.uberfire.client.screens;
 
+import org.jboss.errai.common.client.dom.Form;
+import org.jboss.errai.common.client.dom.Input;
+import org.jboss.errai.ui.client.local.api.IsElement;
+import org.jboss.errai.ui.shared.api.annotations.DataField;
+import org.jboss.errai.ui.shared.api.annotations.Templated;
+import org.uberfire.client.annotations.WorkbenchPartTitle;
+import org.uberfire.client.annotations.WorkbenchPartView;
+import org.uberfire.client.annotations.WorkbenchScreen;
+import org.uberfire.shared.Mood;
+
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
-import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyDownEvent;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.TextBox;
-import org.jboss.errai.ui.shared.api.annotations.DataField;
-import org.jboss.errai.ui.shared.api.annotations.EventHandler;
-import org.jboss.errai.ui.shared.api.annotations.Templated;
-import org.uberfire.client.annotations.WorkbenchPartTitle;
-import org.uberfire.client.annotations.WorkbenchScreen;
-import org.uberfire.shared.Mood;
-
 @Dependent
 @Templated
-@WorkbenchScreen(identifier = "MoodScreen")
-public class MoodScreen extends Composite {
+@WorkbenchScreen( identifier = "MoodScreen" )
+public class MoodScreen implements IsElement {
 
     @Inject
     @DataField
-    private TextBox moodTextBox;
+    Form moodForm;
+
+    @Inject
+    @DataField
+    Input moodTextBox;
 
     @Inject
     Event<Mood> moodEvent;
@@ -48,11 +52,19 @@ public class MoodScreen extends Composite {
         return "Change Mood";
     }
 
-    @EventHandler("moodTextBox")
-    private void onKeyDown( KeyDownEvent event ) {
-        if ( event.getNativeKeyCode() == KeyCodes.KEY_ENTER ) {
-            moodEvent.fire( new Mood( moodTextBox.getText() ) );
-            moodTextBox.setText( "" );
-        }
+
+    @PostConstruct
+    public void init() {
+        moodForm.setOnsubmit( e -> {
+            e.preventDefault();
+            moodEvent.fire( new Mood( moodTextBox.getValue() ) );
+            moodTextBox.setValue( "" );
+        } );
     }
+
+    @WorkbenchPartView
+    public IsElement getView() {
+        return this;
+    }
+
 }

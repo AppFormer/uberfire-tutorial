@@ -61,7 +61,7 @@ public class ProjectsView implements ProjectsPresenter.View {
 
     @SinkNative( Event.ONCLICK )
     @EventHandler( "new-project" )
-    public void addProviderType( final Event event ) {
+    public void addProject( final Event event ) {
         presenter.newProject();
     }
 
