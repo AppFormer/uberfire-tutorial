@@ -16,21 +16,15 @@
 
 package org.uberfire.client.screens;
 
-import org.jboss.errai.common.client.dom.Div;
-import org.jboss.errai.common.client.dom.HTMLElement;
-import org.jboss.errai.ui.shared.api.annotations.DataField;
+import org.jboss.errai.ui.client.local.api.IsElement;
 import org.jboss.errai.ui.shared.api.annotations.Templated;
 
 import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
 
 @Dependent
 @Templated
-public class HelloWorldUberfireView implements HelloWorldUberfirePresenter.View {
+public class HelloWorldUberfireView implements HelloWorldUberfirePresenter.View, IsElement {
 
-    @DataField
-    @Inject
-    Div container;
 
     private HelloWorldUberfirePresenter presenter;
 
@@ -38,8 +32,4 @@ public class HelloWorldUberfireView implements HelloWorldUberfirePresenter.View 
         this.presenter = presenter;
     }
 
-    @Override
-    public HTMLElement getElement() {
-        return container;
-    }
 }
